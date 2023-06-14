@@ -2,7 +2,7 @@
 {{define "content"}}
 <h1>SDVX Replay Server</h1>
 <h2>Wpisz swój nick aby kontynuować</h2>
-<form action="">
+<form action="/auth" method="POST">
     <input type="text" name="username" placeholder="Nick">
     <input type="submit" value="Kontynuuj">
 </form>
