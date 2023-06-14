@@ -7,9 +7,10 @@ package models
 import ()
 
 type Replay struct {
-	ID       int64
-	FilePath string
-	Owner    int64
+	ID           int64
+	FilePath     string
+	CreationTime string
+	Owner        int64
 }
 
 type User struct {

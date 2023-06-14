@@ -1,9 +1,43 @@
 {{define "title"}}SDVX Replay - panel{{end}}
 {{define "content"}}
-<form action="/save" method="GET">
-    <button style="font-size: 24pt; padding: .5em; background-color: #599e34; color: #0e1117;" type="submit">Zapisz
-        powtórkę</button>
-</form>
+<style>
+    .card-container {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5em;
+    }
 
-<h1>Moje powtórki</h1>
+    .link {
+        background-color: rgba(255, 255, 255, 0.05);
+        padding: 1em;
+    }
+
+    .link:hover {
+        cursor: pointer;
+    }
+
+    .save-button {
+        font-size: 24pt;
+        padding: .5em;
+        background-color: hsl(75 85% 60%);
+        color: #0e1117;
+    }
+</style>
+
+<h1>Witaj, {{.username}}</h1>
+<button class="save-button" type="button" role="button" onclick="fetch('/save').then(() => {location.reload()})">Zapisz
+    powtórkę</button>
+
+
+<h3>Moje powtórki</h3>
+<div class="card-container">
+    {{range $i, $elem := .replays}}
+    <a class="link" href="/replays/{{$elem.FilePath}}">
+        <div style="display: flex; flex-direction: column;">
+            <b>{{$elem.FilePath}}</b>
+            <span>Zapisane {{$elem.CreationTime}}</span>
+        </div>
+    </a>
+    {{end}}
+</div>
 {{end}}

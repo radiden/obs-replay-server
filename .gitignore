@@ -1,2 +1,4 @@
 db.sqlite
 obs-replay-server
+*.exe
+replays/*

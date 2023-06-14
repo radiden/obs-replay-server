@@ -1,5 +1,13 @@
 {{define "title"}}SDVX Replay{{end}}
 {{define "content"}}
+<script>
+    // dzieki stackoverflow lmao
+    cookie = key => ((new RegExp((key || '=') + '=(.*?); ', 'gm')).exec(document.cookie + '; ') || ['', null])[1]
+
+    if (cookie("sdvxreplay_session")) {
+        document.location = "/panel"
+    }
+</script>
 <h1>SDVX Replay Server</h1>
 <h2>Wpisz swój nick aby kontynuować</h2>
 <form action="/auth" method="POST">

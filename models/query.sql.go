@@ -10,18 +10,24 @@ import (
 )
 
 const addReplay = `-- name: AddReplay :one
-INSERT INTO replays (file_path, owner) VALUES (?, ?) RETURNING id, file_path, owner
+INSERT INTO replays (file_path, creation_time, owner) VALUES (?, ?, ?) RETURNING id, file_path, creation_time, owner
 `
 
 type AddReplayParams struct {
-	FilePath string
-	Owner    int64
+	FilePath     string
+	CreationTime string
+	Owner        int64
 }
 
 func (q *Queries) AddReplay(ctx context.Context, arg AddReplayParams) (Replay, error) {
-	row := q.db.QueryRowContext(ctx, addReplay, arg.FilePath, arg.Owner)
+	row := q.db.QueryRowContext(ctx, addReplay, arg.FilePath, arg.CreationTime, arg.Owner)
 	var i Replay
-	err := row.Scan(&i.ID, &i.FilePath, &i.Owner)
+	err := row.Scan(
+		&i.ID,
+		&i.FilePath,
+		&i.CreationTime,
+		&i.Owner,
+	)
 	return i, err
 }
 
@@ -37,15 +43,16 @@ func (q *Queries) CreateUser(ctx context.Context, name string) (User, error) {
 }
 
 const replaysForUser = `-- name: ReplaysForUser :many
-SELECT replays.id, file_path, owner, users.id, name FROM replays JOIN users ON replays.owner = users.id WHERE users.name = ?
+SELECT replays.id, file_path, creation_time, owner, users.id, name FROM replays JOIN users ON replays.owner = users.id WHERE users.name = ? ORDER BY replays.id DESC
 `
 
 type ReplaysForUserRow struct {
-	ID       int64
-	FilePath string
-	Owner    int64
-	ID_2     int64
-	Name     string
+	ID           int64
+	FilePath     string
+	CreationTime string
+	Owner        int64
+	ID_2         int64
+	Name         string
 }
 
 func (q *Queries) ReplaysForUser(ctx context.Context, name string) ([]ReplaysForUserRow, error) {
@@ -60,6 +67,7 @@ func (q *Queries) ReplaysForUser(ctx context.Context, name string) ([]ReplaysFor
 		if err := rows.Scan(
 			&i.ID,
 			&i.FilePath,
+			&i.CreationTime,
 			&i.Owner,
 			&i.ID_2,
 			&i.Name,

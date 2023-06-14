@@ -44,19 +44,12 @@ func main() {
 			return nil
 		},
 	}))
-	e.Static("/assets", "assets")
+	e.Debug = true
+	e.HideBanner = true
+	e.Static("/replays", "replays")
 	e.GET("/", handlers.IndexHandler)
 	e.POST("/auth", handlers.AuthHandler)
 	e.GET("/panel", handlers.PanelHandler)
-	e.Logger.Fatal(e.Start(":1323"))
+	e.GET("/save", handlers.SaveHandler)
+	e.Logger.Fatal(e.Start(":80"))
 }
-
-// func getSavedPath(client *goobs.Client) string {
-// 	for {
-// 		msg := <-client.IncomingEvents
-// 		switch m := msg.(type) {
-// 		case *events.ReplayBufferSaved:
-// 			return m.SavedReplayPath
-// 		}
-// 	}
-// }

@@ -7,6 +7,7 @@ CREATE TABLE users (
 CREATE TABLE replays (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     file_path text NOT NULL,
+    creation_time text NOT NULL,
     owner INTEGER NOT NULL,
     FOREIGN KEY (owner) REFERENCES users (id)
 );
